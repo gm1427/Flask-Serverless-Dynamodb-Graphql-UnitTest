@@ -2,26 +2,23 @@ from urllib.parse import urlencode
 import pytest
 import json
 from flask import url_for
-
 from app import app as test_app
+from flask_login import FlaskLoginClient
+
 
 
 @pytest.fixture
 def app():
+    ctx = test_app.app_context()
+    ctx.push()
     return test_app
-
 
 @pytest.fixture
 def client(app) :
+    app.test_client_class = FlaskLoginClient
+    app.testing = True
     return app.test_client()
-    email = "test@local.com"
-    password = "test_password"
-    try:
-        user = django_user_model.objects.get(email=email)
-    except BaseException as e:
-        user = django_user_model.objects.create_user(email=email, password=password)
-    client.force_login(user)
-    return client
+
 
 @pytest.fixture(scope="class")
 def data_store():
@@ -52,3 +49,4 @@ def request_environ(email):
             "requestContext": {"authorizer": {"claims": {"email": email}}}
         }
     }
+    

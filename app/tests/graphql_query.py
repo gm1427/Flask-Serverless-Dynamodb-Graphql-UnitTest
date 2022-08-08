@@ -14,8 +14,8 @@ def create_user():
     
 def update_user():
     return """
-        mutation userMutations{
-            updateUser(name:"testUpdate", userId:"2"){
+        mutation userMutations($email: String!, $name: String!, $userId: String!){
+            updateUser(email:$email, name:$name, userId:$userId){
                 user{
                     name
                     email
